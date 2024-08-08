@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Account Confirmation - Saha Meter</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .header {
+            text-align: center;
+            padding: 10px 0;
+            background-color: #007bff;
+            color: #ffffff;
+        }
+
+        .content {
+            padding: 20px;
+        }
+
+        .content h1 {
+            color: #333333;
+        }
+
+        .content p {
+            color: #666666;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 20px 0;
+            background-color: #007bff;
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 10px 0;
+            color: #999999;
+            font-size: 12px;
+        }
+
+        .code {
+            background-color: #f6f2f2;
+            font-size: 30px;
+            color: #ffffff;
+            padding: 10px;
+            text-align: center;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>Saha Meter</h1>
+    </div>
+    <div class="content">
+        <h1>Account Confirmation</h1>
+        <p>Dear <span th:text="${username}"></span>,</p>
+        <p>Thank you for registering with Saha Meter. Please click the button below to confirm your account:</p>
+        <p class="code" th:text="${code}">123456</p>
+        <a th:href="${confirmationUrl}" class="button">Confirm Account</a>
+        <p>If you did not register for this account, please ignore this email.</p>
+    </div>
+    <div class="footer">
+        <p>&copy; 2024 Saha Meter. All rights reserved.</p>
+    </div>
+</div>
+</body>
+</html>
