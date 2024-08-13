@@ -38,7 +38,7 @@ public class BeansConfig {
      * @return an instance of ApplicationAuditAware
      */
     @Bean
-    public AuditorAware<UUID> auditorAware() {
+    public AuditorAware<String> auditorAware() {
         return new ApplicationAuditAware();
     }
 

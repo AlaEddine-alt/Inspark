@@ -10,11 +10,14 @@ public interface UsersUseCases {
 
     User findById(UUID id);
 
+
     User update(User user);
 
     void toggleEnableDisable(UUID id);
 
     Page<User> findAllWithPaginationAndFiltering(String criteria, Pageable pageable);
+
+    void deleteById(UUID userId,String currentUserRole);
 
 
 }

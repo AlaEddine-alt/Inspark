@@ -34,6 +34,12 @@ public class UserEntity extends BaseEntity implements UserDetails, Principal {
     @Column(name = "firstName", nullable = false)
     private String firstName;
 
+    @Column(name = "provider")
+    private String provider;
+
+    @Column(name = "providerId", unique = true)
+    private String providerId;
+
     @Column(name = "lastName", nullable = false)
     private String lastName;
 
@@ -43,7 +49,7 @@ public class UserEntity extends BaseEntity implements UserDetails, Principal {
     @Column(name = "password")
     private String password;
 
-    @Column(name = "phoneNumber", nullable = false)
+    @Column(name = "phoneNumber")
     private String phoneNumber;
 
     @Column(name = "emailVerified", nullable = false)

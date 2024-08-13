@@ -29,9 +29,9 @@ public class BaseEntity {
     @GeneratedValue()
     private UUID id;
     @CreatedBy
-    private UUID createdBy;
+    private String createdBy;
     @LastModifiedBy
-    private UUID lastModifiedBy;
+    private String lastModifiedBy;
     @CreatedDate
     private LocalDateTime createdAt;
     @LastModifiedDate

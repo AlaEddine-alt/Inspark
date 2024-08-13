@@ -1,27 +1,27 @@
 services:
   postgres:
-    container_name: postgres-sql-saha-meter
+    container_name: postgres-sql-sabeel
     image: postgres
     environment:
       POSTGRES_USER: username
       POSTGRES_PASSWORD: password
       PGDATA: /var/lib/postgresql/data
-      POSTGRES_DB: saha_meter
+      POSTGRES_DB: sabeeldb
     volumes:
       - postgres:/data/postgres
     ports:
       - 5433:5432
     networks:
-      - spring-demo
+      - sabeel-network
     restart: unless-stopped
   mail-dev:
-    container_name: mail-dev-saha-meter
+    container_name: mail-dev-sabeel
     image: maildev/maildev
     ports:
       - 1080:1080
       - 1025:1025
 networks:
-  spring-demo:
+  sabeel-network:
     driver: bridge
 
 volumes:

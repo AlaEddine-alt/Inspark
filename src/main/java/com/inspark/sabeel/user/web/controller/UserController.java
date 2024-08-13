@@ -53,6 +53,12 @@ public class UserController {
         return ResponseEntity.ok(usersUseCases.findAllWithPaginationAndFiltering(criteria, pageable).map(userMapper::toUserDto));
 
     }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteUserById(@PathVariable UUID id,@RequestBody String currentUserRole) {
+        usersUseCases.deleteById(id, currentUserRole);
+
+        return ResponseEntity.noContent().build();
+    }
 
 
 }

@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Account Confirmation - Saha Meter</title>
+    <title>Account Confirmation - Sabeel</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -23,7 +23,7 @@
         .header {
             text-align: center;
             padding: 10px 0;
-            background-color: #007bff;
+            background-color: #d8b9f2; /* Light purple color */
             color: #ffffff;
         }
 
@@ -43,7 +43,7 @@
             display: inline-block;
             padding: 10px 20px;
             margin: 20px 0;
-            background-color: #007bff;
+            background-color: #d8b9f2; /* Light purple color */
             color: #ffffff;
             text-decoration: none;
             border-radius: 5px;
@@ -59,7 +59,7 @@
         .code {
             background-color: #f6f2f2;
             font-size: 30px;
-            color: #ffffff;
+            color: #333333;
             padding: 10px;
             text-align: center;
             border-radius: 5px;
@@ -69,18 +69,18 @@
 <body>
 <div class="container">
     <div class="header">
-        <h1>Saha Meter</h1>
+        <h1>Sabeel</h1>
     </div>
     <div class="content">
         <h1>Account Confirmation</h1>
         <p>Dear <span th:text="${username}"></span>,</p>
-        <p>Thank you for registering with Saha Meter. Please click the button below to confirm your account:</p>
+        <p>Thank you for registering with Sabeel. Please click the button below to confirm your account:</p>
         <p class="code" th:text="${code}">123456</p>
         <a th:href="${confirmationUrl}" class="button">Confirm Account</a>
         <p>If you did not register for this account, please ignore this email.</p>
     </div>
     <div class="footer">
-        <p>&copy; 2024 Saha Meter. All rights reserved.</p>
+        <p>&copy; 2024 Sabeel. All rights reserved.</p>
     </div>
 </div>
 </body>

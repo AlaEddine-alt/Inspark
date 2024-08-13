@@ -37,6 +37,11 @@ public class SabeelApplication {
                         .name("ADMIN")
                         .build());
             }
+            if (rolesRepository.findByName("SUPER-ADMIN") == null) {
+                rolesRepository.save(RoleEntity.builder()
+                        .name("SUPER-ADMIN")
+                        .build());
+            }
         };
     }
 

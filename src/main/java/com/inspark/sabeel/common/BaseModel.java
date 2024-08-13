@@ -19,8 +19,8 @@ public class BaseModel {
 
 
     private UUID id;
-    private UUID createdBy;
-    private UUID lastModifiedBy;
+    private String createdBy;
+    private String lastModifiedBy;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private Integer version;

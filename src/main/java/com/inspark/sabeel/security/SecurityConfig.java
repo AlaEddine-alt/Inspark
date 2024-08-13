@@ -1,5 +1,7 @@
 package com.inspark.sabeel.security;
 
+import com.inspark.sabeel.security.oauth2.Oauth2LoginFailureHandler;
+import com.inspark.sabeel.security.oauth2.Oauth2LoginSuccessHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -28,6 +30,8 @@ public class SecurityConfig {
 
     private final JwtFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
+    private final Oauth2LoginSuccessHandler oauth2LoginSuccessHandler;
+    private final Oauth2LoginFailureHandler oauth2LoginFailureHandler;
 
     /**
      * Configures the security filter chain for JWT authorization.
@@ -63,7 +67,11 @@ public class SecurityConfig {
                 .authenticationProvider(authenticationProvider)
 
                 // Add the JWT filter before the UsernamePasswordAuthenticationFilter
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                .oauth2Login(customizer -> customizer
+                        .successHandler(oauth2LoginSuccessHandler)
+                        .failureHandler(oauth2LoginFailureHandler)
+                );
 
         return http.build();
     }
