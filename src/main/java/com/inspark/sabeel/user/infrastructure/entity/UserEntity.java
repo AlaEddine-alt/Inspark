@@ -2,6 +2,7 @@ package com.inspark.sabeel.user.infrastructure.entity;
 
 import com.inspark.sabeel.auth.infrastructure.entity.RoleEntity;
 import com.inspark.sabeel.common.BaseEntity;
+import com.inspark.sabeel.jobOffer.infrastructure.entity.JobOfferEntity;
 import com.inspark.sabeel.user.domain.enums.Gender;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -16,6 +17,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.security.Principal;
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -78,6 +80,9 @@ public class UserEntity extends BaseEntity implements UserDetails, Principal {
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private Set<RoleEntity> roles;
+
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE},fetch = FetchType.EAGER)
+    private List<JobOfferEntity> jobOffers ;
 
 
 
