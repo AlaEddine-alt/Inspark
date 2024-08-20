@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 
@@ -45,5 +46,10 @@ public class JobOfferService implements JobOfferUseCases {
     @Override
     public void deleteJobOffer(UUID id) {
         jobOffers.deleteById(id);
+    }
+
+    @Override
+    public List<JobOffer> findRecommandedJobs(UUID id) {
+        return jobOffers.findRecommanded(id);
     }
 }

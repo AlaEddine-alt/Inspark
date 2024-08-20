@@ -73,6 +73,9 @@ public class UserEntity extends BaseEntity implements UserDetails, Principal {
     @Column(name = "address")
     private String address;
 
+    @Column(name = "skills")
+    private String skills;
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "users_roles",

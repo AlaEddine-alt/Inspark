@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -24,6 +25,12 @@ public class JobOfferController {
         return ResponseEntity.ok(jobOffers);
     }
 
+    @GetMapping("/recom/{id}")
+    public ResponseEntity<List<JobOffer>> getRecommandedJobOffers(@PathVariable UUID id)
+    {
+       List<JobOffer> jobOffers = jobOfferUseCases.findRecommandedJobs(id);
+        return ResponseEntity.ok(jobOffers);
+    }
 
 
     @GetMapping("/{id}")
@@ -49,4 +56,6 @@ public class JobOfferController {
         jobOfferUseCases.deleteJobOffer(id);
         return ResponseEntity.noContent().build();
     }
+
+
 }

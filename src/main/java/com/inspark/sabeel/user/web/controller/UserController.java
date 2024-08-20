@@ -1,5 +1,6 @@
 package com.inspark.sabeel.user.web.controller;
 
+import com.inspark.sabeel.user.domain.model.User;
 import com.inspark.sabeel.user.domain.port.input.UsersUseCases;
 import com.inspark.sabeel.user.infrastructure.dto.UserDto;
 import com.inspark.sabeel.user.infrastructure.mapper.UserMapper;
@@ -59,6 +60,15 @@ public class UserController {
 
         return ResponseEntity.noContent().build();
     }
+
+    @PutMapping("/update/{id}")
+    public ResponseEntity<UserDto> updateUser(@PathVariable UUID id, @RequestBody UserDto userDto) {
+        User updatedUser = usersUseCases.updateProfile(id, userDto);
+        return ResponseEntity.ok(userMapper.toUserDto(updatedUser));
+    }
+
+
+
 
 
 }

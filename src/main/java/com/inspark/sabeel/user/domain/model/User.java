@@ -28,6 +28,7 @@ public class User extends BaseModel {
     private boolean accountLocked;
     private boolean emailVerified;
     private List<JobOffer> jobOffers;
+    private String skills; // A comma-separated list of skills
 
     public String getFullName() {
         return firstName + " " + lastName;

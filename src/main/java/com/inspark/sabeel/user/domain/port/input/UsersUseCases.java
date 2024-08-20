@@ -1,6 +1,7 @@
 package com.inspark.sabeel.user.domain.port.input;
 
 import com.inspark.sabeel.user.domain.model.User;
+import com.inspark.sabeel.user.infrastructure.dto.UserDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -11,7 +12,9 @@ public interface UsersUseCases {
     User findById(UUID id);
 
 
-    User update(User user);
+    /*User updateUser(User user);  */
+    User updateProfile(UUID userId, UserDto profileDto);
+
 
     void toggleEnableDisable(UUID id);
 

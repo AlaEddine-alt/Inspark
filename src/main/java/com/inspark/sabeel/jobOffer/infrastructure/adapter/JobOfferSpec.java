@@ -41,15 +41,22 @@ public class JobOfferSpec {
     /**
      * Creates a specification to find job offers by search criteria.
      * The criteria is matched against title, description, and place.
+     * If criteria is null or empty, it returns a specification that matches all records.
      *
      * @param criteria the search criteria
      * @return a specification for finding job offers by criteria
      */
     public static Specification<JobOfferEntity> hasCriteria(String criteria) {
-        return (root, query, cb) -> cb.or(
-                cb.like(root.get("title"), "%" + criteria + "%"),
-                cb.like(root.get("description"), "%" + criteria + "%"),
-                cb.like(root.get("place"), "%" + criteria + "%")
-        );
+        if (criteria == null || criteria.trim().isEmpty()) {
+            // Return a specification that matches all records
+            return (root, query, cb) -> cb.conjunction();
+        } else {
+            // Return a specification based on the criteria
+            return (root, query, cb) -> cb.or(
+                    cb.like(root.get("title"), "%" + criteria + "%"),
+                    cb.like(root.get("description"), "%" + criteria + "%"),
+                    cb.like(root.get("place"), "%" + criteria + "%")
+            );
+        }
     }
 }

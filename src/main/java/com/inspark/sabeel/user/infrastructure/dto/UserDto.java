@@ -8,7 +8,8 @@ public record UserDto(
         String firstName,
         String lastName,
         String phoneNumber,
-        Set<String> roles
+        Set<String> roles,
+        String skills
 
 ) {
 }

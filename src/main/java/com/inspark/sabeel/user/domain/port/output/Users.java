@@ -15,6 +15,7 @@ public interface Users {
 
     User update(User user);
 
+
     Page<User> findAll(String criteria, Pageable pageable);
 
     void deleteById(UUID id,String currentUserRole);
