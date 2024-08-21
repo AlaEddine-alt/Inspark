@@ -20,4 +20,11 @@ public class JobOffer extends BaseModel {
     private String description;
     private Date date;
     private String place;
+    private String source;
+    private String nb_posts;
+    private String contact;
+    private String post_date;
+    private String send_resume_link;
+
+
 }

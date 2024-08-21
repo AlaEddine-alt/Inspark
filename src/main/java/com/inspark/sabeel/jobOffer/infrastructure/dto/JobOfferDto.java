@@ -6,6 +6,11 @@ public record JobOfferDto(
          String title,
          String description,
          Date date,
-         String place
+         String place,
+          String source,
+          String nb_posts,
+          String contact,
+          String post_date,
+          String send_resume_link
 ) {
 }
