@@ -1,5 +1,8 @@
 package com.inspark.sabeel.security;
 
+import com.inspark.sabeel.auth.infrastructure.repository.TokenRepository;
+import com.inspark.sabeel.exception.NotFoundException;
+import com.inspark.sabeel.user.infrastructure.repository.UserRepository;
 import jakarta.annotation.Nonnull;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -15,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.UUID;
 
 /**
  * JwtFilter is a custom filter that extends OncePerRequestFilter.
@@ -25,7 +29,8 @@ import java.io.IOException;
 public class JwtFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
-    private final UserDetailsServiceImpl userDetailsService;
+    private final TokenRepository tokenRepository;
+    private final UserRepository userRepository;
 
     /**
      * Filters incoming HTTP requests to validate JWT tokens.
@@ -47,7 +52,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
         final String authorizationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
         final String jwt;
-        final String userEmail;
+        final String id;
 
         // If the authorization header is missing or does not start with "Bearer ", skip filtering
         if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
@@ -57,14 +62,21 @@ public class JwtFilter extends OncePerRequestFilter {
 
         // Extract JWT token from the authorization header
         jwt = authorizationHeader.substring(7);
-        userEmail = jwtService.extractUsername(jwt);
+        id = jwtService.extractUsername(jwt);
 
         // If the user email is not null and the security context does not already have an authentication, proceed with validation
-        if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
+        if (id != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            UserDetails userDetails = userRepository.findById(UUID.fromString(id)).orElseThrow(
+                    () -> new NotFoundException(NotFoundException.NotFoundExceptionType.USER_NOT_FOUND)
+            );
 
             // If the token is valid, set the authentication in the security context
-            if (jwtService.isTokenValid(jwt, userDetails)) {
+            var isTokenValid = tokenRepository.findByToken(jwt)
+                    .map(t -> !t.isExpired() && !t.isRevoked())
+                    .orElse(false);
+
+            // If the token is valid, set the authentication in the security context
+            if (jwtService.isTokenValid(jwt, userDetails) && Boolean.TRUE.equals(isTokenValid)) {
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         userDetails,
                         null,

@@ -8,7 +8,9 @@ import org.apache.commons.text.similarity.JaccardSimilarity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class JobRecommendationService {
@@ -20,8 +22,8 @@ public class JobRecommendationService {
     }
 
     // Recommend job offers based on similarity
-    public List<JobOffer> recommendJobs(User user, List<JobOffer> allJobOffers) {
-        List<JobOffer> recommendedJobs = new ArrayList<>();
+    public Set<JobOffer> recommendJobs(User user, List<JobOffer> allJobOffers) {
+        Set<JobOffer> recommendedJobs = new HashSet<>();
         for (JobOffer jobOffer : allJobOffers) {
             double similarityScore = calculateSimilarity(jobOffer.getDescription(), user.getSkills());
             if (similarityScore > 0.7) { // threshold for recommendation

@@ -1,1 +1,0 @@
-package com.inspark.sabeel.user.infrastructure.exception;

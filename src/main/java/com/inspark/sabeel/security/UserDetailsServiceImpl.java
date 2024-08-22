@@ -1,6 +1,6 @@
 package com.inspark.sabeel.security;
 
-import com.inspark.sabeel.auth.infrastructure.exception.NotFoundException;
+import com.inspark.sabeel.exception.NotFoundException;
 import com.inspark.sabeel.user.infrastructure.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;

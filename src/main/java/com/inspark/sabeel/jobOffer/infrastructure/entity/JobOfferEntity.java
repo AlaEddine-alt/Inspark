@@ -2,13 +2,16 @@ package com.inspark.sabeel.jobOffer.infrastructure.entity;
 
 import com.inspark.sabeel.common.BaseEntity;
 import com.inspark.sabeel.user.infrastructure.entity.UserEntity;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.Table;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -16,18 +19,22 @@ import java.util.List;
 @NoArgsConstructor
 @SuperBuilder
 @Entity
+@Table(name = "job_offer")
 public class JobOfferEntity extends BaseEntity {
 
     private String title;
     private String description;
-    private Date date;
+    private Date date;//to verify
     private String place;
     private String source;
-    private String nb_posts;
+    @Column(name = "nb_posts")
+    private String nbPosts;
     private String contact;
-    private String post_date;
-    private String send_resume_link;
+    @Column(name = "post_date")
+    private String postDate;
+    @Column(name = "send_resume_link")
+    private String sendResumeLink;
 
     @ManyToMany(mappedBy = "jobOffers")
-    List<UserEntity> users;
+    Set<UserEntity> users;
 }

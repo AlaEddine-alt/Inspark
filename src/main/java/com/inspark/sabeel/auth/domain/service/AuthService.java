@@ -10,8 +10,9 @@ import com.inspark.sabeel.auth.domain.port.output.Auth;
 import com.inspark.sabeel.auth.domain.port.output.Codes;
 import com.inspark.sabeel.auth.domain.port.output.Emails;
 import com.inspark.sabeel.auth.domain.utils.Generate6digitsCode;
-import com.inspark.sabeel.auth.infrastructure.exception.ConflictException;
-import com.inspark.sabeel.auth.infrastructure.exception.NotFoundException;
+import com.inspark.sabeel.exception.BadRequestException;
+import com.inspark.sabeel.exception.ConflictException;
+import com.inspark.sabeel.exception.NotFoundException;
 import com.inspark.sabeel.user.domain.model.User;
 import com.inspark.sabeel.user.domain.port.output.Users;
 import jakarta.mail.MessagingException;
@@ -53,8 +54,8 @@ public class AuthService implements AuthUseCases {
     }
 
     @Override
-    public AccessToken authenticate(String email, String password) {
-        return authorisations.authenticate(email, password);
+    public AccessToken signIn(String email, String password) {
+        return authorisations.signIn(email, password);
     }
 
     @Override
@@ -64,7 +65,7 @@ public class AuthService implements AuthUseCases {
                 () -> new NotFoundException(NotFoundException.NotFoundExceptionType.USER_NOT_FOUND, code.getUserId())
         );
         if (!password.equals(confirmPassword)) {
-            throw new ConflictException(ConflictException.ConflictExceptionType.PASSWORD_MISMATCH);
+            throw new BadRequestException(BadRequestException.BadRequestExceptionType.PASSWORD_MISMATCH);
         }
         authorisations.resetPassword(user, password);
     }
@@ -78,12 +79,12 @@ public class AuthService implements AuthUseCases {
                 () -> new NotFoundException(NotFoundException.NotFoundExceptionType.USER_NOT_FOUND, userId)
         );
         if (!newPassword.equals(confirmPassword)) {
-            throw new ConflictException(ConflictException.ConflictExceptionType.PASSWORD_MISMATCH);
+            throw new BadRequestException(BadRequestException.BadRequestExceptionType.PASSWORD_MISMATCH);
         }
         try {
-            authorisations.authenticate(user.getEmail(), oldPassword);
+            authorisations.signIn(user.getEmail(), oldPassword);
         } catch (Exception e) {
-            throw new ConflictException(ConflictException.ConflictExceptionType.WRONG_PASSWORD);
+            throw new BadRequestException(BadRequestException.BadRequestExceptionType.WRONG_PASSWORD);
         }
         authorisations.changePassword(user, newPassword);
     }

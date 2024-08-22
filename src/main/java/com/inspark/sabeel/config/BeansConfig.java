@@ -1,6 +1,6 @@
 package com.inspark.sabeel.config;
 
-import com.inspark.sabeel.common.ApplicationAuditAware;
+import com.inspark.sabeel.config.audit.ApplicationAuditAware;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

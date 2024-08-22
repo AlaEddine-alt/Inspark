@@ -15,16 +15,14 @@ import java.util.Date;
 @AllArgsConstructor
 @SuperBuilder
 public class JobOffer extends BaseModel {
-
     private String title;
     private String description;
     private Date date;
     private String place;
     private String source;
-    private String nb_posts;
+    private String nbPosts;
     private String contact;
-    private String post_date;
-    private String send_resume_link;
-
+    private String postDate;
+    private String sendResumeLink;
 
 }

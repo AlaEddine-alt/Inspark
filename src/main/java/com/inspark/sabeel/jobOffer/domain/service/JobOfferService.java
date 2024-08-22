@@ -1,16 +1,22 @@
 package com.inspark.sabeel.jobOffer.domain.service;
 
-import com.inspark.sabeel.auth.infrastructure.exception.NotFoundException;
+import com.inspark.sabeel.exception.ConflictException;
+import com.inspark.sabeel.exception.NotFoundException;
 import com.inspark.sabeel.jobOffer.domain.model.JobOffer;
 import com.inspark.sabeel.jobOffer.domain.port.input.JobOfferUseCases;
 import com.inspark.sabeel.jobOffer.domain.port.output.JobOffers;
+import com.inspark.sabeel.user.domain.model.User;
+import com.inspark.sabeel.user.domain.port.output.Users;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.StaleObjectStateException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -40,7 +46,12 @@ public class JobOfferService implements JobOfferUseCases {
     public JobOffer updateJobOffer(UUID id, JobOffer updatedJobOffer) {
         var jobOfferToUpdate = jobOffers.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("JobOffer with ID " + id + " not found"));
-        return jobOffers.update(jobOfferToUpdate);
+        try {
+            return jobOffers.update(jobOfferToUpdate);
+        } catch (ObjectOptimisticLockingFailureException | StaleObjectStateException ex) {
+            throw new ConflictException(ConflictException.ConflictExceptionType.CONFLICT_LOCK_VERSION);
+        }
+
     }
 
     @Override
@@ -49,7 +60,7 @@ public class JobOfferService implements JobOfferUseCases {
     }
 
     @Override
-    public List<JobOffer> findRecommandedJobs(UUID id) {
-        return jobOffers.findRecommanded(id);
+    public Set<JobOffer> findRecommandedJobs(User user) {
+        return jobOffers.findRecommanded(user);
     }
 }

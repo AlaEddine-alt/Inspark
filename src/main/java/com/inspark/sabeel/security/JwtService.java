@@ -35,6 +35,7 @@ public class JwtService {
         return extractClaim(token, Claims::getSubject);
     }
 
+
     /**
      * Extracts a specific claim from the JWT token.
      *
@@ -169,4 +170,5 @@ public class JwtService {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         return Keys.hmacShaKeyFor(keyBytes);
     }
+
 }

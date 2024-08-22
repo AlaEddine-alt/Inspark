@@ -1,14 +1,18 @@
 package com.inspark.sabeel.user.infrastructure.adapter.persistence;
 
 import com.inspark.sabeel.auth.domain.model.Role;
-import com.inspark.sabeel.auth.infrastructure.adapter.specifications.UserSpec;
+import com.inspark.sabeel.exception.BadRequestException;
+import com.inspark.sabeel.exception.ConflictException;
+import com.inspark.sabeel.user.infrastructure.adapter.specifications.UserSpec;
 import com.inspark.sabeel.user.domain.model.User;
 import com.inspark.sabeel.user.domain.port.output.Users;
 import com.inspark.sabeel.user.infrastructure.mapper.UserMapper;
 import com.inspark.sabeel.user.infrastructure.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.StaleObjectStateException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
@@ -38,7 +42,11 @@ public class UsersJpaAdapter implements Users {
 
     @Override
     public User update(User user) {
+        try{
         return userMapper.toUser(userRepository.save(userMapper.toUserEntity(user)));
+    } catch (ObjectOptimisticLockingFailureException | StaleObjectStateException ex) {
+        throw new ConflictException(ConflictException.ConflictExceptionType.CONFLICT_LOCK_VERSION);
+    }
     }
 
 
@@ -49,28 +57,27 @@ public class UsersJpaAdapter implements Users {
     }
 
     @Override
-    public void deleteById(UUID id,String currentUserRole) {
-        User userToDelete = findById(id).orElseThrow();
+    public void deleteUser(User userToDelete, String currentUserRole) {
         // Get roles from the user's role set
         Set<String> rolesOfUserToDelete = userToDelete.getRoles().stream()
                 .map(Role::getName) // Assuming Role has a getName() method that returns a String
                 .collect(Collectors.toSet());
-// Role-based deletion logic
+        // Role-based deletion logic
         switch (currentUserRole) {
             case "SUPERADMIN":
                 if (rolesOfUserToDelete.contains("SUPERADMIN")) {
-                    throw new RuntimeException("SuperAdmin cannot delete another SuperAdmin");
+                    throw new BadRequestException(BadRequestException.BadRequestExceptionType.PERMISSION_DENIED);
                 }
                 break;
 
             case "ADMIN":
-                if ( rolesOfUserToDelete.contains("ADMIN") || rolesOfUserToDelete.contains("SUPERADMIN")) {
-                    throw new RuntimeException("Admin cannot delete Admins or SuperAdmins");
+                if (rolesOfUserToDelete.contains("ADMIN") || rolesOfUserToDelete.contains("SUPERADMIN")) {
+                    throw new BadRequestException(BadRequestException.BadRequestExceptionType.PERMISSION_DENIED);
                 }
                 break;
 
             default:
-                throw new RuntimeException("You do not have permission to delete this user");
+                throw new BadRequestException(BadRequestException.BadRequestExceptionType.PERMISSION_DENIED);
         }
 
         userRepository.delete(userMapper.toUserEntity(userToDelete));

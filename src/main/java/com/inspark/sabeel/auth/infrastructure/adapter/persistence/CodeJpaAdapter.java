@@ -2,9 +2,9 @@ package com.inspark.sabeel.auth.infrastructure.adapter.persistence;
 
 import com.inspark.sabeel.auth.domain.model.Code;
 import com.inspark.sabeel.auth.domain.port.output.Codes;
-import com.inspark.sabeel.auth.infrastructure.exception.NotFoundException;
 import com.inspark.sabeel.auth.infrastructure.mapper.CodeMapper;
 import com.inspark.sabeel.auth.infrastructure.repository.CodeRepository;
+import com.inspark.sabeel.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;

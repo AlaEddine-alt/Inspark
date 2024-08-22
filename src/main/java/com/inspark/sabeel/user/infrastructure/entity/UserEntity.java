@@ -146,7 +146,7 @@ public class UserEntity extends BaseEntity implements UserDetails, Principal {
      */
     @Override
     public String getUsername() {
-        return email;
+        return getId().toString();
     }
 
     @Override

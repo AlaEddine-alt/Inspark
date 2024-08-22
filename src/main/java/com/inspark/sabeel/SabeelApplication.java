@@ -1,7 +1,6 @@
 package com.inspark.sabeel;
 
-import com.inspark.sabeel.auth.infrastructure.entity.RoleEntity;
-import com.inspark.sabeel.auth.infrastructure.repository.RolesRepository;
+import com.inspark.sabeel.auth.infrastructure.utils.RolesInitializer;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -23,26 +22,8 @@ public class SabeelApplication {
 
     @Bean
     @Transactional
-    public CommandLineRunner run(
-            RolesRepository rolesRepository
-    ) {
-        return (args) -> {
-            if (rolesRepository.findByName("USER") == null) {
-                rolesRepository.save(RoleEntity.builder()
-                        .name("USER")
-                        .build());
-            }
-            if (rolesRepository.findByName("ADMIN") == null) {
-                rolesRepository.save(RoleEntity.builder()
-                        .name("ADMIN")
-                        .build());
-            }
-            if (rolesRepository.findByName("SUPER-ADMIN") == null) {
-                rolesRepository.save(RoleEntity.builder()
-                        .name("SUPER-ADMIN")
-                        .build());
-            }
-        };
+    public CommandLineRunner run(RolesInitializer rolesInitializer) {
+        return args -> rolesInitializer.createRoles();
     }
 
 }

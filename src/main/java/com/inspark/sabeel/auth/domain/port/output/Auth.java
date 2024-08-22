@@ -9,7 +9,7 @@ public interface Auth {
 
     User signUp(User authUser);
 
-    AccessToken authenticate(String email, String password);
+    AccessToken signIn(String email, String password);
 
     void resetPassword(User user, String password);
 

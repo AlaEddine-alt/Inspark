@@ -1,12 +1,10 @@
 package com.inspark.sabeel.user.domain.service;
 
-import com.inspark.sabeel.auth.infrastructure.exception.NotFoundException;
+import com.inspark.sabeel.exception.NotFoundException;
 import com.inspark.sabeel.user.domain.model.User;
 import com.inspark.sabeel.user.domain.port.input.UsersUseCases;
 import com.inspark.sabeel.user.domain.port.output.Users;
-import com.inspark.sabeel.user.infrastructure.dto.UserDto;
-import com.inspark.sabeel.user.infrastructure.mapper.UserMapper;
-import com.inspark.sabeel.user.infrastructure.repository.UserRepository;
+import com.inspark.sabeel.user.application.dto.UserDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,7 +18,6 @@ public class UserService implements UsersUseCases {
 
     private final Users users;
 
-
     @Override
     public User findById(UUID id) {
         return users.findById(id).orElseThrow(
@@ -28,13 +25,6 @@ public class UserService implements UsersUseCases {
         );
     }
 
-    /*@Override
-    public User updateUser(User user) {
-        var userToUpdate = users.findById(user.getId()).orElseThrow(
-                () -> new NotFoundException(NotFoundException.NotFoundExceptionType.USER_NOT_FOUND)
-        );
-        return users.update(userToUpdate);
-    }  */
     @Override
     public User updateProfile(UUID userId, UserDto profileDto) {
         var user = users.findById(userId).orElseThrow(
@@ -72,7 +62,7 @@ public class UserService implements UsersUseCases {
         var userToDelete = users.findById(id).orElseThrow(
                 () -> new NotFoundException(NotFoundException.NotFoundExceptionType.USER_NOT_FOUND)
         );
-        users.deleteById(id,currentUserRole);
+        users.deleteUser(userToDelete,currentUserRole);
     }
     }
 

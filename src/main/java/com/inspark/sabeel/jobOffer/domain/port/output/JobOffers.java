@@ -5,8 +5,8 @@ import com.inspark.sabeel.user.domain.model.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 public interface JobOffers {
@@ -20,7 +20,7 @@ public interface JobOffers {
 
     JobOffer create(JobOffer jobOffer);
 
-    List<JobOffer> findRecommanded(UUID id);
+    Set<JobOffer> findRecommanded(User user);
 
 
 }

@@ -60,7 +60,7 @@ public class AuthJpaAdapter implements Auth {
     }
 
     @Override
-    public AccessToken authenticate(String email, String password) {
+    public AccessToken signIn(String email, String password) {
         // Authenticate user
         var auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
         // Generate JWT token and refresh token
@@ -69,16 +69,12 @@ public class AuthJpaAdapter implements Auth {
         var user = (UserEntity) auth.getPrincipal();
         claims.put("fullName", user.getFullName());
         claims.put("email", user.getEmail());
-        claims.put("roles", user.getRoles());
-        claims.put("id", user.getId());
         var token = jwtService.generateToken(claims, user);
         var refreshToken = jwtService.generateRefreshToken(claims, user);
         // Return the access token
         return AccessToken.builder()
                 .token(token)
                 .refreshToken(refreshToken)
-                .expiresIn(System.currentTimeMillis() + jwtService.getJwtExpiration())
-                .refreshExpiresIn(System.currentTimeMillis() + jwtService.getJwtExpiration() * 2)
                 .build();
     }
 

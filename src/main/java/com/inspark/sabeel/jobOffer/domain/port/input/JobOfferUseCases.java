@@ -5,7 +5,7 @@ import com.inspark.sabeel.user.domain.model.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 public interface JobOfferUseCases {
@@ -25,5 +25,5 @@ public interface JobOfferUseCases {
     // Delete a job offer by ID
     void deleteJobOffer(UUID id);
 
-    List<JobOffer> findRecommandedJobs(UUID id);
+    Set<JobOffer> findRecommandedJobs(User user);
 }

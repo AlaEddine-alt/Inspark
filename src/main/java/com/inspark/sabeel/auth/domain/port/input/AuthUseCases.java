@@ -20,7 +20,7 @@ public interface AuthUseCases {
      */
     User signUp(User authUser) throws MessagingException;
 
-    AccessToken authenticate(String email, String password);
+    AccessToken signIn(String email, String password);
 
     void resetPassword(String code, String password, String confirmPassword);
 
