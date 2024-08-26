@@ -22,6 +22,8 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import static com.inspark.sabeel.common.AuthUtils.getCurrentAuthenticatedUser;
+
 @RestController
 @RequestMapping("/jobs")
 @RequiredArgsConstructor
@@ -51,9 +53,7 @@ public class JobOfferController {
     @GetMapping("/recommandations")
     public ResponseEntity<Set<JobOfferResponseDto>> getRecommandedJobOffers()
     {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserEntity currentUser =(UserEntity) authentication.getPrincipal();
-        User user = userMapper.toUser(currentUser);
+        User user = getCurrentAuthenticatedUser(userMapper);
         return ResponseEntity.ok(jobOfferUseCases.findRecommandedJobs(user).stream().map(jobOfferMapper::toJobOfferResponseDto).collect(Collectors.toSet()));
     }
 

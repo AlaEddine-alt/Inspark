@@ -14,6 +14,7 @@ import com.inspark.sabeel.auth.infrastructure.mapper.CodeMapper;
 import com.inspark.sabeel.auth.infrastructure.mapper.RoleMapper;
 import com.inspark.sabeel.auth.infrastructure.repository.CodeRepository;
 import com.inspark.sabeel.auth.infrastructure.repository.RolesRepository;
+import com.inspark.sabeel.auth.infrastructure.utils.TokenUtils;
 import com.inspark.sabeel.security.JwtService;
 import com.inspark.sabeel.user.domain.model.User;
 import com.inspark.sabeel.user.infrastructure.entity.UserEntity;
@@ -21,6 +22,7 @@ import com.inspark.sabeel.user.infrastructure.mapper.UserMapper;
 import com.inspark.sabeel.user.infrastructure.repository.UserRepository;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -31,7 +33,7 @@ import java.util.Set;
 
 @Component
 @RequiredArgsConstructor
-
+@Slf4j
 public class AuthJpaAdapter implements Auth {
 
     private final UserRepository userRepository;
@@ -45,6 +47,7 @@ public class AuthJpaAdapter implements Auth {
     private final CodeRepository codes;
     private final Emails emails;
     private final CodeMapper codeMapper;
+    private final TokenUtils tokenUtils;
 
     @Override
     public User signUp(User authUser) {
@@ -61,17 +64,18 @@ public class AuthJpaAdapter implements Auth {
 
     @Override
     public AccessToken signIn(String email, String password) {
-        // Authenticate user
+        log.info("Signing in user: {}", email);
         var auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
-        // Generate JWT token and refresh token
-        // claims are the information that we want to store in the token
         var claims = new HashMap<String, Object>();
         var user = (UserEntity) auth.getPrincipal();
         claims.put("fullName", user.getFullName());
         claims.put("email", user.getEmail());
         var token = jwtService.generateToken(claims, user);
         var refreshToken = jwtService.generateRefreshToken(claims, user);
-        // Return the access token
+
+        tokenUtils.revokeAllUserTokens(user.getId());
+        tokenUtils.saveUserToken(user.getId(), token);
+        log.info("User signed in successfully: {}", email);
         return AccessToken.builder()
                 .token(token)
                 .refreshToken(refreshToken)

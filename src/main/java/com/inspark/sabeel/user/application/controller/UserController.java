@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
+import static com.inspark.sabeel.common.AuthUtils.getCurrentAuthenticatedUser;
+
 @RestController
 @RequestMapping("/users")
 @RequiredArgsConstructor
@@ -28,8 +30,7 @@ public class UserController {
 
     @GetMapping("/me")
     public ResponseEntity<UserDto> findCurrentUser() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserEntity user =(UserEntity) authentication.getPrincipal();
+        User user = getCurrentAuthenticatedUser(userMapper);
         return ResponseEntity.ok(userMapper.toUserDto(user));
     }
 
@@ -65,8 +66,7 @@ public class UserController {
 
     @PutMapping("/update-profile")
     public ResponseEntity<UserDto> updateUser(@RequestBody UserDto userDto) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserEntity user =(UserEntity) authentication.getPrincipal();
+        User user = getCurrentAuthenticatedUser(userMapper);
         User updatedUser = usersUseCases.updateProfile(user.getId(), userDto);
         return ResponseEntity.ok(userMapper.toUserDto(updatedUser));
     }

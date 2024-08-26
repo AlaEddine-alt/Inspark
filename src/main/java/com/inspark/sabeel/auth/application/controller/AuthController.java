@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
+import static com.inspark.sabeel.common.AuthUtils.getCurrentAuthenticatedUserId;
+
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
@@ -71,9 +73,7 @@ public class AuthController {
 
     @PostMapping("/change-password")
     public ResponseEntity<Void> changePassword(@RequestParam String oldPassword, @RequestParam String newPassword, @RequestParam String confirmPassword) {
-        //  Get the current user authenticated user
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UUID id = UUID.fromString(authentication.getName());
+        UUID id = UUID.fromString(getCurrentAuthenticatedUserId());
         authUseCases.changePassword(id, oldPassword, newPassword, confirmPassword);
         return new ResponseEntity<>(HttpStatus.OK);
     }
