@@ -26,7 +26,7 @@ public class JobRecommendationService {
         Set<JobOffer> recommendedJobs = new HashSet<>();
         for (JobOffer jobOffer : allJobOffers) {
             double similarityScore = calculateSimilarity(jobOffer.getDescription(), user.getSkills());
-            if (similarityScore > 0.7) { // threshold for recommendation
+            if (similarityScore > 0.3) { // threshold for recommendation
                 recommendedJobs.add(jobOffer);
             }
         }

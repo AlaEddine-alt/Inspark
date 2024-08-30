@@ -20,6 +20,7 @@ public class AuthUtils {
             case UserEntity userEntity -> userMapper.toUser(userEntity);
             default -> throw new IllegalStateException("Unexpected principal type: " + principal.getClass().getName());
         };
+
     }
 
     public static String getCurrentAuthenticatedUserId() {
